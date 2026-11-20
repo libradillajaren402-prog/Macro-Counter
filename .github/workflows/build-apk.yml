@@ -1,0 +1,46 @@
+name: Build Macro Counter APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Install dependencies and build web app
+        run: |
+          npm install
+          npm run build
+
+      - name: Wrap with Capacitor for Android
+        run: |
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npx cap init "Macro Counter" "com.macrocounter.app" --web-dir=dist
+          npx cap add android
+          npx cap sync android
+
+      - name: Build Debug APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Macro-Counter-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
