@@ -29,7 +29,13 @@ jobs:
       - name: Wrap with Capacitor for Android
         run: |
           npm install @capacitor/core @capacitor/cli @capacitor/android --legacy-peer-deps
-          npx cap init "Macro Counter" "com.macrocounter.app" --web-dir=dist
+          cat << 'EOF' > capacitor.config.json
+          {
+            "appId": "com.macrocounter.app",
+            "appName": "Macro Counter",
+            "webDir": "dist"
+          }
+          EOF
           npx cap add android
           npx cap sync android
 
