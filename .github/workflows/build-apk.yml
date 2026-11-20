@@ -1,3 +1,4 @@
+
 name: Build Macro Counter APK
 
 on:
@@ -8,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
     steps:
       - uses: actions/checkout@v4
 
@@ -19,8 +23,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - uses: android-actions/setup-android@v3
 
       - name: Install dependencies and build web app
         run: |
@@ -42,9 +44,10 @@ jobs:
 
       - name: Build Debug APK
         run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
