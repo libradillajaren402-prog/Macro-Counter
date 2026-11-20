@@ -1,0 +1,6 @@
+{
+  "name": "MacroLedger — Daily Macronutrient Calculator & Tracker",
+  "description": "Calculate personalized daily protein, carbohydrate, and fat targets and track meals with precision macro breakdowns and weekly trends.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
